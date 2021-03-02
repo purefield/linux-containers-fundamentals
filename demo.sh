@@ -35,5 +35,3 @@ ___ "Kill container process"
 cmd kill -9 $pid
 ___ "List container"
 cmd podman ps
-___ "Container Runtime Components"
-cmd podman info
