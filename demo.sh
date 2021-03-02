@@ -17,6 +17,8 @@ cmd jq \'.history[].created_by\' b4f59ea05ae49a910caeffa65896bfbc53040fb4d480a01
 ___ "Inspect Image Layer"
 cmd tar -tf eb7bf34352ca9ba2fb0218870ac3c47b76d0b1fb7d50543d3ecfa497eca242b0.tar
 cmd tar -tf 5cbd821b0b9630e7fca368313ba65143e9ab442da663a0ac30ce17b0a968befc.tar
+___ "Graph Driver"
+cmd podman info
 
 __ "Run Container"
 ___ "Create isolated process"
