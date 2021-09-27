@@ -27,7 +27,10 @@ cmd tar -tf $layer2
 ___ " * Layer 3 "
 layer3=$(jq -r '.[0].Layers[2]' manifest.json)
 cmd tar -tf $layer3
-cd -
+___ " * Layer 4 "
+layer4=$(jq -r '.[0].Layers[3]' manifest.json)
+cmd tar -tf $layer4
+cd - 2>&1 > /dev/null
 
 
 __ "Examine Java Container Image Layers using podman"
@@ -58,7 +61,7 @@ cmd tar -tf $layer2
 ___ " * Layer 3 "
 layer3=$(jq -r '.[0].Layers[2]' manifest.json)
 cmd tar -tf $layer3
-cd -
+cd - 2>&1 > /dev/null
 
 
 __ "Examine Container Image Layers using skopeo"
@@ -87,7 +90,7 @@ cmd tar -tf $layer2
 ___ " * Layer 3 "
 layer3=$(jq -r '.layers[4].digest | split(":") | .[1]' manifest.json)
 cmd tar -tf $layer3
-cd -
+cd - 2>&1 > /dev/null
 
 
 __ "Run Container"
@@ -100,6 +103,7 @@ cmd pstree -spc $pid
 ___ "Container process tree"
 podman exec -it $(cat container-id) ls -l /proc/1/cmdline
 podman exec -it $(cat container-id) cat /proc/1/cmdline
+podman exec -it $(cat container-id) cat /app/hello.txt
 echo
 ___ "List container"
 cmd podman ps
@@ -107,5 +111,3 @@ ___ "Kill container process"
 cmd kill -9 $pid
 ___ "List container"
 cmd podman ps
-
-
