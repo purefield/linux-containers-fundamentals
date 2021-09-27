@@ -1,5 +1,36 @@
 . format.sh
-__ "Examine Container Image Layers using podman"
+__ "Examine Example Container Image Layers using podman"
+___ "Create Image"
+cmd podman build image -t demo-ubi
+___ "Cleanup Output"
+cmd rm -rf output
+cmd mkdir -p output; cd output
+___ "Save Image to directory"
+cmd podman save --output image.tgz localhost/demo-ubi
+___ "Extract Image"
+cmd tar xf image.tgz
+___ "List Image Layers"
+cmd ls -rt
+cmd jq \'.\' manifest.json
+___ "RootFS"
+configJson=$(jq -r '.[0].Config' manifest.json)
+cmd jq \'.rootfs\' $configJson
+___ "Build History for each Layer"
+cmd jq \'.history[].created_by\' $configJson
+___ "Inspect Image Layers"
+___ " * Layer 1 "
+layer1=$(jq -r '.[0].Layers[0]' manifest.json)
+cmd tar -tf $layer1
+___ " * Layer 2 "
+layer2=$(jq -r '.[0].Layers[1]' manifest.json)
+cmd tar -tf $layer2
+___ " * Layer 3 "
+layer3=$(jq -r '.[0].Layers[2]' manifest.json)
+cmd tar -tf $layer3
+cd -
+
+
+__ "Examine Java Container Image Layers using podman"
 ___ "Cleanup Output"
 cmd rm -rf output
 cmd mkdir -p output; cd output
@@ -61,7 +92,7 @@ cd -
 
 __ "Run Container"
 ___ "Create isolated process"
-cmd podman run -d --cidfile container-id --rm openjdk:8-jdk-alpine tail -f /dev/null
+cmd podman run -d --cidfile container-id --rm localhost/demo-ubi:latest tail -f /dev/null
 pid=$(ps -efl | grep null | grep -v grep | awk '{ print $4; }')
 echo $pid
 ___ "Host process tree"
