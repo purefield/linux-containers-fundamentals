@@ -95,7 +95,7 @@ cd - 2>&1 > /dev/null
 
 __ "Run Container"
 ___ "Create isolated process"
-cmd podman run -d --cidfile container-id --rm localhost/demo-ubi:latest tail -f /dev/null
+cmd podman run -d --rm localhost/demo-ubi:latest tail -f /dev/null # --cidfile container-id 
 pid=$(ps -efl | grep null | grep -v grep | awk '{ print $4; }')
 echo $pid
 ___ "Host process tree"
