@@ -27,9 +27,6 @@ cmd tar -tf $layer2
 ___ " * Layer 3 "
 layer3=$(jq -r '.[0].Layers[2]' manifest.json)
 cmd tar -tf $layer3
-___ " * Layer 4 "
-layer4=$(jq -r '.[0].Layers[3]' manifest.json)
-cmd tar -tf $layer4
 cd - 2>&1 > /dev/null
 
 
