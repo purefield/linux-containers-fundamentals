@@ -94,6 +94,10 @@ cd - 2>&1 > /dev/null
 
 
 __ "Run Container"
+___ "Cleanup Output"
+cmd rm -rf output
+cmd mkdir -p output; cd output
+rm container-id -f 2>&1 > /dev/null
 ___ "Create isolated process"
 cmd podman run -d --cidfile container-id --rm localhost/demo-ubi:latest tail -f /dev/null
 pid=$(pgrep -u `id -u` tail)
@@ -111,4 +115,3 @@ ___ "Kill container process"
 cmd kill -9 $pid
 ___ "List container"
 cmd podman ps
-rm container-id -f 2>&1 > /dev/null
