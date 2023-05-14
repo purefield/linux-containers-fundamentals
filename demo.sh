@@ -92,15 +92,15 @@ cd - 2>&1 > /dev/null
 
 __ "Run Container"
 ___ "Create isolated process"
-cmd podman run -d --cidfile container-id --rm localhost/demo-ubi:latest tail -f /dev/null
-pid=$(pgrep -u `id -u` tail)
+cmd podman run -d --cidfile container-id --rm --name endurance localhost/demo-ubi:latest tail -f /dev/null
+pid=$(podman inspect endurance --format '{{.State.Pid}}')
 echo $pid
 ___ "Host process tree"
 cmd pstree -spc $pid
 ___ "Container process tree"
 podman exec -it $(cat container-id) ls -l /proc/1/cmdline
-podman exec -it $(cat container-id) cat /proc/1/cmdline
-podman exec -it $(cat container-id) cat /app/hello.txt
+podman exec -it endurance cat /proc/1/cmdline
+podman exec -it endurance cat /app/hello.txt
 echo
 ___ "List container"
 cmd podman ps
